@@ -66,7 +66,7 @@ def scrapeTable(driver):
 allEvents =[]
 closeOverlay(driver)
 allEvents=scrapeTable(driver)
-with open("events_table.csv", mode="w", newline="", encoding="utf-8") as file:
+with open("eventsTable.csv", mode="w", newline="", encoding="utf-8") as file:
     writer = csv.DictWriter(file, fieldnames=["Date & Time", "Category", "Event Name", "Location","Description"])
     writer.writeheader()
     writer.writerows(allEvents)
