@@ -7,6 +7,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.support.ui import WebDriverWait
 
+# Setting options to allow the chrome to run in headless mode.
 options = Options()
 options.add_argument("--headless")
 options.add_argument("--disable-gpu")
@@ -20,6 +21,8 @@ driver.get('https://www.kultur.bamberg.de/_plaza/kuba.cfm?fts=&fid=Alle&f=Katego
 wait = WebDriverWait(driver, 10)
 print("ChromeDriver is working!")
 
+# Accessing each events to get description throws a overlay,
+# which has to be closed before the description is extracted
 def closeOverlay(driver):
     try:
         overlay = driver.find_element(By.CLASS_NAME, "termsfeed-com---nb-interstitial-overlay")
@@ -28,6 +31,8 @@ def closeOverlay(driver):
     except Exception:
         print("No overlay found or already removed.")
 
+# Function extracts description from all the events listed,
+# event link and driver instance are passed 
 def getEventDescription(link,driver):
     try:
         closeOverlay(driver)
@@ -42,7 +47,8 @@ def getEventDescription(link,driver):
         driver.back()
         wait.until(EC.presence_of_element_located((By.CLASS_NAME, "table"))) 
         return "Description not available"
-    
+
+# Events are listed as a table, following function get basic event details.    
 def scrapeTable(driver):
     events = []
     try:
@@ -63,6 +69,8 @@ def scrapeTable(driver):
     except Exception as e:
         print(f"Error scraping table: {e}")
     return events
+
+# Events are saved to allEvents and saved to a csv file.
 allEvents =[]
 closeOverlay(driver)
 allEvents=scrapeTable(driver)
